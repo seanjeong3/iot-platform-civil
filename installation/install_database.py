@@ -73,3 +73,5 @@ def install_database(filepath):
 	create_database_folders(param)
 	# Install dependencies
 	install_database_dependency()
+
+

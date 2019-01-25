@@ -3,6 +3,7 @@
 
 import sys
 import os
+from installation.install_database import install_database
 
 INSTALL_ARG = ["install", "uninstall"]
 TARGET_ARG = ["database", "webserver"]
@@ -12,19 +13,19 @@ def read_arg():
 	arg = {}
 	# check argument 1
 	if len(sys.argv)<2:
-		print('Error: arg_2 is missing {0}'.foramt(INSTALL_ARG))
+		print('ERROR: arg_2 is missing {0}'.format(INSTALL_ARG))
 		exit(0)
 	elif sys.argv[1] not in INSTALL_ARG:
-		print('Error: unexpected arg_2 {0}. It should be {1}'.format(sys.argv[1],INSTALL_ARG))
+		print('ERROR: unexpected arg_2 {0}. It should be {1}'.format(sys.argv[1],INSTALL_ARG))
 		exit(0)
 	else:
 		arg["install"] = sys.argv[1]
 	# check argument 2
 	if len(sys.argv)<3:
-		print('Error: arg_3 is missing {0}'.format(TARGET_ARG))
+		print('ERROR: arg_3 is missing {0}'.format(TARGET_ARG))
 		exit(0)
 	elif sys.argv[2] not in TARGET_ARG:
-		print('Error: unexpected arg_3 {0}. It should be {1}'.format(sys.argv[2],TARGET_ARG))
+		print('ERROR: unexpected arg_3 {0}. It should be {1}'.format(sys.argv[2],TARGET_ARG))
 		exit(0)
 	else:
 		arg["target"] = sys.argv[2]
@@ -32,13 +33,13 @@ def read_arg():
 	arg["input"] = None
 	if len(sys.argv)==4:
 		if not os.path.isfile(sys.argv[3]):
-			print('Error: file {0} does not exist'.format(sys.argv[3]))
+			print('ERROR: file {0} does not exist'.format(sys.argv[3]))
 			exit(0)
 		else:
 			arg["input"] = sys.argv[3]
 	# check redundant arguments
 	if len(sys.argv) > 4:
-		print('Error: too many arguments')
+		print('ERROR: too many arguments')
 		exit(0)
 	# return a dictionary argument
 	return arg
@@ -50,6 +51,7 @@ def check_and_start(install, target, func, arg):
 	while True:
 		ans = raw_input('Start {0} {1} [(y)/n]'.format(install, target)) or 'y'
 		if ans == 'y':
+			print("----------------")
 			break
 		elif ans == 'n':
 			print('{0} has been canceled'.format(install))
@@ -60,8 +62,8 @@ def check_and_start(install, target, func, arg):
 
 
 
-def install_database(arg):
-	print('dummy install database')
+# def install_database(arg):
+# 	print('dummy install database')
 def install_webserver(arg):
 	print('dummy install webserver')
 def uninstall_database(arg):
