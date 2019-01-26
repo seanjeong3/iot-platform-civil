@@ -1,4 +1,3 @@
-// Setup metadata for single-node database implememtation
 {
 	"db_info":
 	{
@@ -27,6 +26,7 @@
 	},
 	"ws_info":
 	{
-		"port": 8080
+		"port": 8080,
+		"database_nodes": ["127.0.0.1"]
 	}
 }
