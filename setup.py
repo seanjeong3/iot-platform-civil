@@ -46,7 +46,6 @@ def read_arg():
 	return arg
 
 
-
 # Get confirmation from user and start installation/uninstallation
 def check_and_start(install, target, func, arg):
 	while True:
@@ -62,7 +61,6 @@ def check_and_start(install, target, func, arg):
 	func(arg)
 
 
-
 # def install_database(arg):
 # 	print('dummy install database')
 def install_webserver(arg):
@@ -71,7 +69,6 @@ def uninstall_database(arg):
 	print('[setup.py] dummy install database')
 def uninstall_webserver(arg):
 	print('[setup.py] dummy uninstall webserver')
-
 
 
 if __name__ == '__main__':
@@ -86,5 +83,3 @@ if __name__ == '__main__':
 			check_and_start("uninstallation", "database", uninstall_database, arg)
 		elif arg["target"]=="webserver":
 			check_and_start("uninstallation", "webserver",uninstall_webserver, arg)
-
-
