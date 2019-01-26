@@ -36,7 +36,7 @@ def update_webserver(param):
 	with open('{0}/webServer.js'.format(param["webserver_home"]), 'r') as f :
 		filedata = f.read()
 		filedata = filedata.replace('var portno = 3000;', 'var portno = {0};'.format(param["port"]))
-		filedata = filedata.replace("['localhost:9042']", "[]".format(", ".join(["'"+s+":9042'" for s in param["database_nodes"]])))
+		filedata = filedata.replace("['localhost:9042']", "[{0}]".format(", ".join(["'"+s+":9042'" for s in param["database_nodes"]])))
 		with open('{0}/webServer.js'.format(param["webserver_home"]), 'w') as f :
 			f.write(filedata)
 
