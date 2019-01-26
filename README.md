@@ -19,7 +19,7 @@ In the file, "seeds" data
 ```sh
 "seeds": ["seed_ip1","seed_ip2","..."],
 ```
-needs to include actual public IP addresses of the some of database nodes (i.e., [@seed nodes](https://docs.datastax.com/en/cassandra/3.0/cassandra/initialize/initMultipleDS.html)). For example, if you have two seed nodes "10.10.123.001" and "10.10.123.002", the "seeds" data needs to be updated as follows:
+needs to include actual public IP addresses of the some of database nodes (i.e., [seed nodes](https://docs.datastax.com/en/cassandra/3.0/cassandra/initialize/initMultipleDS.html)). For example, if you have two seed nodes "10.10.123.001" and "10.10.123.002", the "seeds" data needs to be updated as follows:
 ```sh
 "seeds": ["10.10.123.001","10.10.123.002"],
 ```
