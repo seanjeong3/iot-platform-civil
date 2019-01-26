@@ -170,6 +170,7 @@ app.post('/sensordata', function (request, response) {
 	// Send query to Cassandra database
 	cassClient.batch(queries, { prepare: true }, function (err) {
    		if (err) {
+   			console.log(err)
             response.status(400).end();
 		} else {
 			response.status(200).end();
