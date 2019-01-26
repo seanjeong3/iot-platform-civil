@@ -72,8 +72,3 @@ For the first run, database schema needs to be imported as follows:
 python setup_schema.py
 ```
 It should be noted that data schema import needs to be done only on a SINGLE database node.
-
-# Use
-## REST API
-The platform provides following services.
-- '''sh GET /sensordata/:id '''
