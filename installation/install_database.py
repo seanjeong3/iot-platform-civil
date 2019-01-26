@@ -126,7 +126,7 @@ def update_cassandra_config(param):
 
 def export_cassandra_path(param):
 	os.system('export CQLSH_NO_BUNDLED=true')
-	os.system('export PATH="{0}/bin:$PATH"'.format(param["cassandra_home"]))
+	os.system('export PATH={0}/bin:$PATH'.format(param["cassandra_home"]))
 	with open('{0}/.profile'.format(param["home_path"]), 'r') as f :
 		filedata = f.read()
 		if "export CQLSH_NO_BUNDLED=true" not in filedata:
