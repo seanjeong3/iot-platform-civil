@@ -12,6 +12,14 @@ python setup.py install database installation/setup_single.json
 python setup.py install webserver installation/setup_single.json
 ```
 
+# Installation (multi-node)
+For multi-node platform, the file installation/setup_multi.json needs to be updated.
+In the file, "seeds" data
+```sh
+"seeds": ["seed_ip1","seed_ip2","..."],
+```
+needs to include actual public addresses of the some of database nodes (i.e., [@seed nodes](https://docs.datastax.com/en/cassandra/3.0/cassandra/initialize/initMultipleDS.html))
+
 # Run (single-node)
 To run the platform, both Cassandra database and web server need to be executed as follows:
 1. Run Cassandra 
@@ -26,6 +34,7 @@ For the first run, database schema needs to be imported as follows:
 ```sh
 python setup_schema.py
 ```
+
 
 
 
