@@ -18,35 +18,35 @@ def prepare_database_param(filepath):
 def create_database_folders(param):
 	# Check if there already exists something on the cassandra_home. If so stop installation.
 	if os.path.isdir(param["cassandra_home"]):
-		print("ERROR: cassandra_home path {0} is already in use".format(param["cassandra_home"]))
+		print("[install_database.py] ERROR: cassandra_home path {0} is already in use".format(param["cassandra_home"]))
 		exit(0)
 	else:
 		os.makedirs(param["cassandra_home"])
 		# print("{0} is created".format(param["cassandra_home"]))
 	# hints_directory
 	if os.path.isdir(param["hints_directory"]):
-		print("ERROR: hints_directory path {0} is already in use".format(param["hints_directory"]))
+		print("[install_database.py] ERROR: hints_directory path {0} is already in use".format(param["hints_directory"]))
 		exit(0)
 	else:
 		os.makedirs(param["hints_directory"])
 		# print("{0} is created".format(param["hints_directory"]))
 	# data_file_directories
 	if os.path.isdir(param["data_file_directories"]):
-		print("ERROR: data_file_directories path {0} is already in use".format(param["data_file_directories"]))
+		print("[install_database.py] ERROR: data_file_directories path {0} is already in use".format(param["data_file_directories"]))
 		exit(0)
 	else:
 		os.makedirs(param["data_file_directories"])
 		# print("{0} is created".format(param["data_file_directories"]))
 	# commitlog_directory
 	if os.path.isdir(param["commitlog_directory"]):
-		print("ERROR: commitlog_directory path {0} is already in use".format(param["commitlog_directory"]))
+		print("[install_database.py] ERROR: commitlog_directory path {0} is already in use".format(param["commitlog_directory"]))
 		exit(0)
 	else:
 		os.makedirs(param["commitlog_directory"])
 		# print("{0} is created".format(param["commitlog_directory"]))
 	# saved_caches_directory
 	if os.path.isdir(param["saved_caches_directory"]):
-		print("ERROR: saved_caches_directory path {0} is already in use".format(param["saved_caches_directory"]))
+		print("[install_database.py] ERROR: saved_caches_directory path {0} is already in use".format(param["saved_caches_directory"]))
 		exit(0)
 	else:
 		os.makedirs(param["saved_caches_directory"])
@@ -66,12 +66,13 @@ def install_database_dependency():
 
 def install_database(filepath):
 	# Prepare parameters
-	print("Read database parameters.")
+	print("[install_database.py] Read database parameters.")
 	param = prepare_database_param(filepath)
 	# Create necessary folders
-	print("Create database folders")
+	print("[install_database.py] Create database folders.")
 	create_database_folders(param)
 	# Install dependencies
+	print("[install_database.py] Create database dependency.")
 	install_database_dependency()
 
 
