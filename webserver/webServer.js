@@ -131,16 +131,17 @@ app.get('/sensordata/:id', function (request, response) {
 	// Send query to Cassandra database
 	var results = [];
 	const options = { prepare : true , fetchSize : 5000 };
-	cassClient.eachRow(cassQueryStmt, cassQueryVal, options, function (n, row) { 
-	     results.push(row);
-	  }, function (err, result) {
-	     if (result.nextPage) {
-	       result.nextPage();
-	     } else {
-	     	response.status(200).send(JSON.stringify({"content":results, "links":[{"rel": "self","href": url}]}));
-	     }
-	  }
-	);
+	cassClient.execute(cassQueryStmt, cassQueryVal, function(err, result) {
+		if (err) {
+			console.log(err);
+            response.status(400).send(JSON.stringify(err));
+		} else {
+			// console.log('Success (' + new Date() + '): GET /sensordata/:id [Query: ' + cassQueryStmt +']')
+			console.log(result.rows);
+			response.status(200).send(JSON.stringify({"content":result.rows, "links":[{"rel": "self","href": url}]}));
+		}
+		return;
+	});
 });
 
 
