@@ -91,9 +91,11 @@ def update_cassandra_config(param):
 		filedata = filedata.replace('# commitlog_directory: /var/lib/cassandra/commitlog', 'commitlog_directory: {0}'.format(param["commitlog_directory"]))
 		filedata = filedata.replace('# saved_caches_directory: /var/lib/cassandra/saved_caches', 'saved_caches_directory: {0}'.format(param["saved_caches_directory"]))
 		filedata = filedata.replace('listen_address: localhost', 'listen_address: {0}'.format(param["listen_address"]))
-		filedata = filedata.replace('# broadcast_address: 1.2.3.4', 'broadcast_address: {0}'.format(param["ip_address"])) # param["ip_address"]
+		if param["broadcast_address"]:
+			filedata = filedata.replace('# broadcast_address: 1.2.3.4', 'broadcast_address: {0}'.format(param["ip_address"])) # param["ip_address"]
 		filedata = filedata.replace('rpc_address: localhost', 'rpc_address: {0}'.format(param["rpc_address"]))
-		filedata = filedata.replace('# broadcast_rpc_address: 1.2.3.4', 'broadcast_rpc_address: {0}'.format(param["ip_address"])) # param["ip_address"]
+		if param["broadcast_rpc_address"]:
+			filedata = filedata.replace('# broadcast_rpc_address: 1.2.3.4', 'broadcast_rpc_address: {0}'.format(param["ip_address"])) # param["ip_address"]
 		filedata = filedata.replace('# rpc_min_threads: 16', 'rpc_min_threads: {0}'.format(param["rpc_min_threads"]))
 		filedata = filedata.replace('# rpc_max_threads: 2048', 'rpc_max_threads: {0}'.format(param["rpc_max_threads"]))
 		filedata = filedata.replace('read_request_timeout_in_ms: 5000', 'read_request_timeout_in_ms: {0}'.format(param["read_request_timeout_in_ms"]))
