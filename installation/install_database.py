@@ -58,9 +58,13 @@ def create_database_folders(param):
 
 
 def install_database_dependency():
+	print("[install_database.py] sudo apt-get update")
 	os.system('sudo apt-get update')
+	print("[install_database.py] sudo apt install openjdk-8-jre-headless")
 	os.system('sudo apt install openjdk-8-jre-headless')
+	print("[install_database.py] sudo apt install python-pip")
 	os.system('apt install python-pip')
+	print("[install_database.py] pip install cassandra-driver")
 	os.system('pip install cassandra-driver')
 
 
