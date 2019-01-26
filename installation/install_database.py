@@ -3,7 +3,7 @@ import os
 import socket
 
 def prepare_database_param(filepath):
-	param = json.loads(open("setup.json").read())["db_info"]
+	param = json.loads(open(filepath).read())["db_info"]
 	param["ip_address"] = socket.gethostbyname(socket.gethostname())
 	param["home_path"] = os.path.expanduser("~")
 	param["current_path"] = os.getcwd()
