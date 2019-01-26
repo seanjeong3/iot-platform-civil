@@ -1,7 +1,7 @@
 {
 	"db_info":
 	{
-		"multi_node": false,
+		"multi_node": true,
 		"seeds": ["13.64.110.84","13.64.111.28"],
 		"cluster_name": "Test Cluster",
 		"data_center_id": "dc1",
