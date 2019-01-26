@@ -4,6 +4,7 @@
 import sys
 import os
 from installation.install_database import install_database, uninstall_database
+from installation.install_webserver import install_webserver, uninstall_webserver
 
 INSTALL_ARG = ["install", "uninstall"]
 TARGET_ARG = ["database", "webserver"]
@@ -59,12 +60,6 @@ def check_and_start(install, target, func, arg):
 		else:
 			print('[setup.py] Please answer in [y/n]')
 	func(arg["input"])
-
-
-def install_webserver(arg):
-	print('[setup.py] dummy install webserver')
-def uninstall_webserver(arg):
-	print('[setup.py] dummy uninstall webserver')
 
 
 if __name__ == '__main__':
