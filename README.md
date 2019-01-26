@@ -2,7 +2,7 @@
 An IoT platform for the management of data collected from civil infrastructure monitoring
 
 # Installation
-## single-node
+## Single-node
 The platform includes Cassandra database and web server built upon Node.js. The platform currently has been tested on Ubuntu 16.04 and Ubuntu 18.04. For installation, please follow the steps below:
 1. Install database
 ```sh
@@ -13,7 +13,7 @@ python setup.py install database installation/setup_single.json
 python setup.py install webserver installation/setup_single.json
 ```
 
-## multi-node
+## Multi-node
 For multi-node platform, the file installation/setup_multi.json needs to be updated.
 In the file, "seeds" data
 ```sh
@@ -42,7 +42,7 @@ python setup.py install webserver installation/setup_multi.json
 ```
 
 # Run
-## single-node
+## Single-node
 To run the platform, both Cassandra database and web server need to be executed as follows:
 1. Run Cassandra 
 ```sh
@@ -57,7 +57,7 @@ For the first run, database schema needs to be imported as follows:
 python setup_schema.py
 ```
 
-## multi-node
+## Multi-node
 For multi-node platform, both Cassandra database and web server need to be executed as follows:
 1. Run Cassandra on every database nodes
 ```sh
@@ -73,5 +73,7 @@ python setup_schema.py
 ```
 It should be noted that data schema import needs to be done only on a SINGLE database node.
 
-
-
+# Use
+## REST API
+The platform provides following services.
+- '''sh GET /sensordata/:id '''
