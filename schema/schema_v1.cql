@@ -1,6 +1,10 @@
--- Create Keyspace
+-- Create Keyspace for single-node db
 CREATE KEYSPACE IF NOT EXISTS bridge_monitoring
-WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'dc' : 1 };
+WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+
+-- Create Keyspace for multi-node db
+-- CREATE KEYSPACE IF NOT EXISTS bridge_monitoring
+-- WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'dc' : 1 };
 
 
 -- Sensor
