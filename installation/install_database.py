@@ -68,6 +68,13 @@ def install_database_dependency():
 	os.system('pip install cassandra-driver')
 
 
+def install_cassandra(param):
+	os.system("wget https://archive.apache.org/dist/cassandra/3.9/apache-cassandra-3.9-bin.tar.gz")
+	os.system('tar -zxvf apache-cassandra-3.9-bin.tar.gz -C {0}'.format(param["cassandra_home"]))
+	os.system('sudo chown -R $USER:$GROUP {0}'.format(param["cassandra_path"]))
+	
+
+
 def install_database(filepath):
 	# Prepare parameters
 	print("[install_database.py] Read database parameters.")
@@ -78,5 +85,9 @@ def install_database(filepath):
 	# Install dependencies
 	print("[install_database.py] Create database dependency.")
 	install_database_dependency()
+	# Install Cassandra 
+	print("[install_database.py] Install Cassandra.")
+	install_cassandra(param)
+
 
 
