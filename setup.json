@@ -2,6 +2,8 @@
 	"db_info":
 	{
 		"cluster_name": "Test Cluster",
+		"data_center_id": "dc1",
+		"rack_id": "rack1",
 		"seeds": ["127.0.0.1"],
 		"hints_directory": "data/hints",
 		"data_file_directories": "data/data",
@@ -20,6 +22,8 @@
 		"cas_contention_timeout_in_ms": 1000,
 		"truncate_request_timeout_in_ms": 60000,
 		"request_timeout_in_ms": 10000,
+		"authenticator": "AllowAllAuthenticator",
+		"authorizer": "AllowAllAuthorizer",
 		"endpoint_snitch": "SimpleSnitch",
 		"batch_size_warn_threshold_in_kb": 5,
 		"batch_size_fail_threshold_in_kb": 50
