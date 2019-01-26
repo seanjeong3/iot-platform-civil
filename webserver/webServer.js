@@ -566,61 +566,69 @@ app.post('/sensor', function (request, response) {
 
 
 
-// /* 
-//  * --------------------
-//  * POST: /admin/login
-//  * --------------------
-//  */ 
-// app.post('/admin/login', function (request, response) {  
-// 	const query = 'SELECT * FROM userlist WHERE user_id = ?';
-// 	// Execute query 
-// 	cassClient.execute(query, [request.body["user_id"]], function(err, result) {
-// 		if (err) {
-// 			console.log(err);
-//             response.status(400).send(JSON.stringify(err));
-// 		} else {
-// 			if (result.rows.length === 0 ){
-//         		response.status(400).send(JSON.stringify(err));
-//             	return;
-// 			};
-// 			var userInfo = result.rows[0];
-// 	        if (userInfo["password"] !== request.body.password) {
-// 			    response.status(400).send("Wrong Password");
-// 			    return;
-// 			}
-// 			request.session.user_id = userInfo.user_id;
-// 			request.session.first_name = userInfo.first_name;
-// 			request.session.last_name = userInfo.last_name;
-// 			response.status(200).end();
-// 		}
-// 		return;
-// 	});
-// });
+/* 
+ * --------------------
+ * POST: /admin/login
+ * --------------------
+ */ 
+app.post('/admin/login', function (request, response) {  
+	if (!isAuthRequired) {
+        response.status(200).end();
+        return;
+    };
+	const query = 'SELECT * FROM userlist WHERE user_id = ?';
+	// Execute query 
+	cassClient.execute(query, [request.body["user_id"]], function(err, result) {
+		if (err) {
+			console.log(err);
+            response.status(400).send(JSON.stringify(err));
+		} else {
+			if (result.rows.length === 0 ){
+        		response.status(400).send(JSON.stringify(err));
+            	return;
+			};
+			var userInfo = result.rows[0];
+	        if (userInfo["password"] !== request.body.password) {
+			    response.status(400).send("Wrong Password");
+			    return;
+			}
+			request.session.user_id = userInfo.user_id;
+			request.session.first_name = userInfo.first_name;
+			request.session.last_name = userInfo.last_name;
+			response.status(200).end();
+		}
+		return;
+	});
+});
 
 
 
-// /* 
-//  * --------------------
-//  * POST: /admin/logout
-//  * --------------------
-//  */ 
-// app.post('/admin/logout', function (request, response) {    
-//     if (request.session.user_id === undefined) {
-//         response.status(400).end();
-//         return;
-//     }
-// 	delete request.session.user_id;
-//     delete request.session.first_name;
-//     delete request.session.last_name;
-//     request.session.destroy(function(err) {
-//         if (err) {
-//             console.log(err);
-//             response.status(400).send(JSON.stringify(err));
-//             return;
-//         }
-//         response.status(200).end();
-//     });   
-// });
+/* 
+ * --------------------
+ * POST: /admin/logout
+ * --------------------
+ */ 
+app.post('/admin/logout', function (request, response) {   
+	if (!isAuthRequired) {
+        response.status(200).end();
+        return;
+    };
+    if (request.session.user_id === undefined) {
+        response.status(400).end();
+        return;
+    }
+	delete request.session.user_id;
+    delete request.session.first_name;
+    delete request.session.last_name;
+    request.session.destroy(function(err) {
+        if (err) {
+            console.log(err);
+            response.status(400).send(JSON.stringify(err));
+            return;
+        }
+        response.status(200).end();
+    });   
+});
 
 
 
