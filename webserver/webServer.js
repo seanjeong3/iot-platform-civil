@@ -92,7 +92,7 @@ app.get('/sensordata/:id', function (request, response) {
     // Record request URL
 	var url = request.protocol + '://' + request.get('host') + request.originalUrl;
 	// Prepare cql query statement
-	var cassQueryStmt = 'SELECT sensor_id, event_time, data FROM sensordataraw WHERE ';
+	var cassQueryStmt = 'SELECT sensor_id, event_time, data FROM sensordata WHERE ';
 	var cassQueryVal = [];
 	var queryCond = [];
 	queryCond.push('sensor_id = ?');
