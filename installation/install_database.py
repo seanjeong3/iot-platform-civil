@@ -62,6 +62,9 @@ def create_database_folders(param):
 	os.system('sudo chown -R $USER:$GROUP {0}'.format(param["saved_caches_directory"]))
 
 
+def stop_cassandra():
+	os.system('pkill -f \'java.*cassandra\'')
+	
 
 # Create necessary directories for Cassandra 
 def remove_database_folders(param):
@@ -213,6 +216,9 @@ def install_database(filepath):
 
 
 def uninstall_database(filepath):
+	# Prepare parameters
+	print("[install_database.py] Read database parameters.")
+	param = prepare_database_param(filepath)
 	while True:
 		print("[install_database.py] This action will permenantly REMOVE following directories")
 		print("----------")
@@ -231,9 +237,8 @@ def uninstall_database(filepath):
 			exit(0)
 		else:
 			print('[install_database.py] Please answer in [y/n]')
-	# Prepare parameters
-	print("[install_database.py] Read database parameters.")
-	param = prepare_database_param(filepath)
+	print("[install_database.py] Stop Cassandra process.")
+	stop_cassandra()
 	print("[install_database.py] Remove database folders.")
 	remove_database_folders(param)
 
