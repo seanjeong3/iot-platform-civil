@@ -11,7 +11,7 @@
 		"saved_caches_directory": "data/saved_caches",
 		"listen_address": "localhost",
 		"broadcast_address": "1.2.3.4",
-		"rpc_address": "localhost",
+		"rpc_address": "0.0.0.0",
 		"broadcast_rpc_address": "1.2.3.4",
 		"rpc_min_threads": 16,
 		"rpc_max_threads": 2048,
