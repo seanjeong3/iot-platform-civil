@@ -37,19 +37,16 @@ CREATE TABLE IF NOT EXISTS bridge_monitoring.WeatherData
 
 
 -- General BrIM
-DROP TABLE bridge_monitoring.Unit;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.Unit
 (uid uuid, N text, T text,
   length text, force text, angle text, temperature text,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.Project;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.Project
 (uid uuid, N text, T text,
   child map<uuid,text>, PRIMARY KEY(uid));
 CREATE INDEX ON bridge_monitoring.Project(N);
 
-DROP TABLE bridge_monitoring.Group;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.Group
 (uid uuid, N text, T text,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
@@ -64,7 +61,6 @@ CREATE INDEX IF NOT EXISTS ON bridge_monitoring.Geometry(N);
 
 
 -- Engineering model
-DROP TABLE bridge_monitoring.Node;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.Node
 (uid uuid, N text, T text,
   x double, y double, z double, tx text, ty text, tz text,
@@ -72,7 +68,6 @@ CREATE TABLE IF NOT EXISTS bridge_monitoring.Node
   r double, theta double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FELine;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FELine
 (uid uuid, N text, T text, 
   node1 text, node2 text, section text, betaangle double,
@@ -81,7 +76,6 @@ CREATE TABLE IF NOT EXISTS bridge_monitoring.FELine
   node2p text, node2v2 text, node2v3 text, node2t text, node2m2 text, node2m3 text, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FESurface;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FESurface
 (uid uuid, N text, T text, 
   numjoints int, node1 text, node2 text, node3 text, node4 text, node5 text, 
@@ -102,21 +96,18 @@ CREATE TABLE IF NOT EXISTS bridge_monitoring.FESurface
   springdir1type text, springnormaldir text,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FELineSection;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FELineSection
 (uid uuid, N text, T text, 
   material text, shape text, width double, height double, 
   webthickness double, flangethickness double, eccv2 double,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FESurfaceSection;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FESurfaceSection
 (uid uuid, N text, T text, 
   material text, matangle double, surfacetype text, type text,
   thickness double, bendthickness double, drilldof text,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.Material;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.Material
 (uid uuid, N text, T text, 
   e double, nu double, d double, a double, fy double, fu double, fc28 double, type text,  
@@ -124,115 +115,97 @@ CREATE TABLE IF NOT EXISTS bridge_monitoring.Material
   vismass double, visstiff double, hysmass double, hysstiff double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.Rebar;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.Rebar
 (uid uuid, N text, T text,
   diameter double, area double, weight double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FECoordinateSystem;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FECoordinateSystem
 (uid uuid, N text, T text,
   type text, x double, y double, z double, rx double, ry double, rz double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.Alignment;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.Alignment
 (uid uuid, N text, T text,
   x double, y double, z double,
   station double, azimuth double, latitude double, longitude double, coordinatesystem text, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.Straight;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.Straight
 (uid uuid, N text, T text,
   SegType text, Station double, Radius double, Azimuth double,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.ElevationPoint;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.ElevationPoint
 (uid uuid, N text, T text,
   SegType text, Station double, Grade double, coordinatesystem text, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEGrid;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEGrid
 (uid uuid, N text, T text,
   coordinatesystem text, gridid text, axisdirection text, coordinate double, angle double, linetype text,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FELane;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FELane
 (uid uuid, N text, T text,
   lanefrom text, referencelayout text, referenceframe text, station double, width double, 
   offset double, radius double, discalong int, discacross int, lefttype text, righttype text, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEVehicle;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEVehicle
 (uid uuid, N text, T text,
   numload int,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEVehicleClass;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEVehicleClass
 (uid uuid, N text, T text,
   vehname text, scalefactor double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEVehicleLoad;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEVehicleLoad
 (uid uuid, N text, T text,
   loadtype text, unifload double, uniftype text, unifwidth double, axleload double, 
   axletype text, axlewidth double, mindist double, maxdist double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FELoadPattern;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FELoadPattern
 (uid uuid, N text, T text,
   designtype text, selfweightfactor double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEMultiStep;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEMultiStep
 (uid uuid, N text, T text,
   loadduration double, loaddiscretization double, vehicle text, lane text, 
   station double, starttime double, direction  text, Speed double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEFunction;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEFunction
 (uid uuid, N text, T text,
   functiontype text, frequency double, time double, value double, 
   period double, accel double, funcdamp double,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FELoadCase;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FELoadCase
 (uid uuid, N text, T text,
   type text, initialcondition text, designtype text, runcase text,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEStatic;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEStatic
 (uid uuid, N text, T text,
   loadtype text, loadname text, scalefactor double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEModal;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEModal
 (uid uuid, N text, T text,
   modetype text, maxnummodes int, minnummodes int, frequencyshift double, 
   cutofffrequency double, convergencetolerance double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEMultiStepStatic;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEMultiStepStatic
 (uid uuid, N text, T text,
   loadtype text, loadname text, scalefactor double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FEDirectIntegrationHistory;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FEDirectIntegrationHistory
 (uid uuid, N text, T text,
   numstep int, stepsize double, loadtype text, loadname text, function text, 
@@ -241,27 +214,23 @@ CREATE TABLE IF NOT EXISTS bridge_monitoring.FEDirectIntegrationHistory
   integrationmethod text, gamma double, beta double, alpha double, 
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.SectionDesigner;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.SectionDesigner
 (uid uuid, N text, T text,
   designtype text, dsgnorchck text, includevstr text,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.ShapePlate;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.ShapePlate
 (uid uuid, N text, T text,
   shapename text, shapemat text, zorder int, xcenter double, ycenter double, thickness double, 
   width double, rotation double, reinforcing text, rebarmat text, barmattype text,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.ShapeSolidRectangle;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.ShapeSolidRectangle
 (uid uuid, N text, T text,
   shapename text, shapemat text, zorder int, xcenter double, ycenter double, height double,
   width double, rotation double, reinforcing text, rebarmat text, barmattype text,
   parent map<uuid,text>, child map<uuid,text>, PRIMARY KEY(uid));
 
-DROP TABLE bridge_monitoring.FiberGeneral;
 CREATE TABLE IF NOT EXISTS bridge_monitoring.FiberGeneral
 (uid uuid, N text, T text,
   numfibersd2 text, numfibersd3 text, coordsys text, gridangle text, 
