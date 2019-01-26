@@ -137,7 +137,6 @@ app.get('/sensordata/:id', function (request, response) {
             response.status(400).send(JSON.stringify(err));
 		} else {
 			// console.log('Success (' + new Date() + '): GET /sensordata/:id [Query: ' + cassQueryStmt +']')
-			console.log(result.rows);
 			response.status(200).send(JSON.stringify({"content":result.rows, "links":[{"rel": "self","href": url}]}));
 		}
 		return;
@@ -241,7 +240,6 @@ app.get('/sensor', function (request, response) {
 		return;
 	});
 });
-
 
 
 /* 
@@ -352,219 +350,206 @@ app.post('/sensor', function (request, response) {
 });
 
 
-
-// /* 
-//  * --------------------
-//  * GET: /imagedata/:id
-//  * --------------------
-//  */ 
-// const imagedataIDQuery = ['date','event_time_begin','event_time_end'];
-// app.get('/imagedata/:id', function (request, response) {
-// 	if (isAuthRequired && request.session.user_id === undefined) {
-//         response.status(401).end();
-//         return;
-//     }
-
-// 	var url = request.protocol + '://' + request.get('host') + request.originalUrl;
-
-// 	var cassQueryStmt = 'SELECT camera_id, event_time, image FROM imagedata WHERE ';
-// 	var cassQueryVal = [];
-// 	var queryCond = [];
-// 	queryCond.push('camera_id = ?');
-// 	cassQueryVal.push(request.params.id);
-
-// 	for (k in imagedataIDQuery) {
-// 		if (k in request.query) {
-// 	        response.writeHead(400, {'Content-Type': 'text/plain'});
-// 	        response.end('ERROR: Required query is omitted (' + k + ')');
-// 	        return;
-// 		} 
-// 	};
-
-// 	// Check if there're unexpected query condition
-// 	for (var k in request.query) {
-// 		if (imagedataIDQuery.indexOf(k) <= -1) {
-// 	        response.writeHead(400, {'Content-Type': 'text/plain'});
-// 	        response.end('ERROR: Unknown query parameter (' + k + ')');
-// 	        return;
-// 		} 
-// 	};
-
-// 	var beginDate = new Date(Date.parse(request.query['event_time_begin']))
-// 	var endDate = new Date(Date.parse(request.query['event_time_end']))
-
-// 	queryCond.push('event_time >= ?');
-// 	cassQueryVal.push(beginDate);
-// 	queryCond.push('event_time <= ?');
-// 	cassQueryVal.push(endDate);
-
-// 	var month = [];
-// 	var m = new Date(beginDate);
-// 	m.setDate(1);
-
-// 	while (m <= endDate) {
-// 		month.push(dateFormat(m, "yyyymm"));
-// 		m.setMonth(m.getMonth() + 1);
-// 	};
-
-// 	queryCond.push('month IN ?');
-// 	cassQueryVal.push(month);
-
-// 	// Build query statement
-// 	cassQueryStmt += queryCond.join(' AND ');
-
-// 	// Execute query 
-// 	cassClient.execute(cassQueryStmt, cassQueryVal, function(err, result) {
-// 		if (err) {
-//             response.status(400).send(JSON.stringify(err));
-// 		} else {
-// 			console.log('Success (' + new Date() + '): GET /sensordata/:id [Query: ' + cassQueryStmt +']')
-// 			response.status(200).send(JSON.stringify({"content":result.rows, "links":[{"rel": "self","href": url}]}));
-// 		}
-// 		return;
-// 	});
-// });
+/* 
+ * --------------------
+ * GET: /imagedata/:id
+ * --------------------
+ */ 
+const imagedataIDQuery = ['date','event_time_begin','event_time_end'];
+app.get('/imagedata/:id', function (request, response) {
+	// Check auth
+	if (isAuthRequired && request.session.user_id === undefined) {
+        response.status(401).end();
+        return;
+    }
+    // Record request URL
+	var url = request.protocol + '://' + request.get('host') + request.originalUrl;
+	// Prepare cql query statement
+	var cassQueryStmt = 'SELECT camera_id, event_time, image FROM imagedata WHERE ';
+	var cassQueryVal = [];
+	var queryCond = [];
+	queryCond.push('camera_id = ?');
+	cassQueryVal.push(request.params.id);
+	// Check required query parameters
+	for (var k in imagedataIDQuery) {
+		if (!(imagedataIDQuery[k] in request.query)) {
+	        response.writeHead(400, {'Content-Type': 'text/plain'});
+	        response.end('ERROR: Required query is omitted (' + k + ')');
+	        return;
+		} 
+	};
+	// Check unexpected query parameters
+	for (var k in request.query) {
+		if (imagedataIDQuery.indexOf(k) <= -1) {
+	        response.writeHead(400, {'Content-Type': 'text/plain'});
+	        response.end('ERROR: Unknown query parameter (' + k + ')');
+	        return;
+		} 
+	};
+	queryCond.push('event_time >= ?');
+	queryCond.push('event_time <= ?');
+	queryCond.push('month IN ?');
+	cassQueryStmt += queryCond.join(' AND ');
+	// Prepare query parameter values
+	var beginDate = new Date(Date.parse(request.query['event_time_begin']));
+	var endDate = new Date(Date.parse(request.query['event_time_end']));
+	cassQueryVal.push(beginDate);
+	cassQueryVal.push(endDate);
+	var month = [];
+	var m = new Date(beginDate);
+	m.setDate(1);
+	while (m <= endDate) {
+		month.push(dateFormat(m, "yyyymm"));
+		m.setMonth(m.getMonth() + 1);
+	};
+	cassQueryVal.push(month);
+	// Bind query statement and query parameter values
+	// Send query to Cassandra database
+	cassClient.execute(cassQueryStmt, cassQueryVal, function(err, result) {
+		if (err) {
+            response.status(400).send(JSON.stringify(err));
+		} else {
+			console.log('Success (' + new Date() + '): GET /imagedata/:id [Query: ' + cassQueryStmt +']');
+			response.status(200).send(JSON.stringify({"content":result.rows, "links":[{"rel": "self","href": url}]}));
+		}
+		return;
+	});
+});
 
 
+/* 
+ * --------------------
+ * POST: /imagedata
+ * --------------------
+ */ 
 
-// /* 
-//  * --------------------
-//  * POST: /imagedata
-//  * --------------------
-//  */ 
-
-// app.post('/imagedata', function (request, response) {   
-// 	if (isAuthRequired && request.session.user_id === undefined) {
-//         response.status(401).end();
-//         return;
-//     }
-
-// 	var body = JSON.parse(JSON.stringify(request.body))
-// 	const query = 'INSERT INTO imagedata (camera_id, month, event_time, image) values (?, ?, ?, ?)';
-// 	var queries = [];
-// 	for (var i=0; i<body.length; i++){
-// 		var ts = new Date(Date.parse(body[i].event_time));
-// 		var buf = new Buffer(body[i].data, 'base64');
-// 		var params = [body[i].camera_id, dateFormat(ts, "yyyymm"), ts, buf];
-// 		queries.push({'query':query, 'params':params});
-// 	};
-
-// 	cassClient.batch(queries, { prepare: true }, function (err) {
-//    		if (err) {
-//             response.status(400).end();
-// 		} else {
-// 			response.status(200).end();
-// 		}
-// 		return;
-// 	});
-// });
-
-
-
-// /* 
-//  * --------------------
-//  * GET: /weatherdata
-//  * --------------------
-//  */ 
-// const weatherdataIDQuery = ['event_time_begin','event_time_end'];
-// app.get('/weatherdata/:state/:city', function (request, response) {
-// 	if (isAuthRequired && request.session.user_id === undefined) {
-//         response.status(401).end();
-//         return;
-//     }
-
-// 	var url = request.protocol + '://' + request.get('host') + request.originalUrl;
-
-// 	var cassQueryStmt = 'SELECT * FROM weatherdata WHERE ';
-// 	var cassQueryVal = [];
-// 	var queryCond = [];
-// 	queryCond.push('state = ?');
-// 	cassQueryVal.push(request.params.state);
-// 	queryCond.push('city = ?');
-// 	cassQueryVal.push(request.params.city);
-
-// 	for (k in weatherdataIDQuery) {
-// 		if (k in request.query) {
-// 	        response.writeHead(400, {'Content-Type': 'text/plain'});
-// 	        response.end('ERROR: Required query is omitted (' + k + ')');
-// 	        return;
-// 		} 
-// 	};
-
-// 	// Check if there're unexpected query condition
-// 	for (var k in request.query) {
-// 		if (weatherdataIDQuery.indexOf(k) <= -1) {
-// 	        response.writeHead(400, {'Content-Type': 'text/plain'});
-// 	        response.end('ERROR: Unknown query parameter (' + k + ')');
-// 	        return;
-// 		} 
-// 	};
-
-// 	var beginDate = new Date(Date.parse(request.query['event_time_begin']));
-// 	var endDate = new Date(Date.parse(request.query['event_time_end']));
-
-// 	queryCond.push('event_time >= ?');
-// 	cassQueryVal.push(beginDate);
-// 	queryCond.push('event_time <= ?');
-// 	cassQueryVal.push(endDate);
-
-// 	// Build query statement
-// 	cassQueryStmt += queryCond.join(' AND ');
-
-// 	console.log(cassQueryStmt)
-// 	console.log(cassQueryVal)
-
-// 	// Execute query 
-// 	cassClient.execute(cassQueryStmt, cassQueryVal, function(err, result) {
-// 		if (err) {
-// 			console.log(err)
-//             response.status(400).send(JSON.stringify(err));
-// 		} else {
-// 			response.status(200).send(JSON.stringify({"content":result.rows, "links":[{"rel": "self","href": url}]}));
-// 		}
-// 		return;
-// 	});
-// });
+app.post('/imagedata', function (request, response) {   
+	// Check auth
+	if (isAuthRequired && request.session.user_id === undefined) {
+        response.status(401).end();
+        return;
+    }
+    // Parse incoming data
+	var body = JSON.parse(JSON.stringify(request.body));
+	// Create query statement
+	const query = 'INSERT INTO imagedata (camera_id, month, event_time, image) values (?, ?, ?, ?)';
+	var queries = [];
+	for (var i=0; i<body.length; i++){
+		var ts = new Date(Date.parse(body[i].event_time));
+		var buf = new Buffer(body[i].data, 'base64');
+		var params = [body[i].camera_id, dateFormat(ts, "yyyymm"), ts, buf];
+		queries.push({'query':query, 'params':params});
+	};
+	// Send query to Cassandra database
+	cassClient.batch(queries, { prepare: true }, function (err) {
+   		if (err) {
+            response.status(400).end();
+		} else {
+			response.status(200).end();
+		}
+		return;
+	});
+});
 
 
+/* 
+ * --------------------
+ * GET: /weatherdata
+ * --------------------
+ */ 
+const weatherdataIDQuery = ['event_time_begin','event_time_end'];
+app.get('/weatherdata/:state/:city', function (request, response) {
+	// Check auth
+	if (isAuthRequired && request.session.user_id === undefined) {
+        response.status(401).end();
+        return;
+    }
+	// Record request URL
+	var url = request.protocol + '://' + request.get('host') + request.originalUrl;
+	// Prepare cql query statement
+	var cassQueryStmt = 'SELECT * FROM weatherdata WHERE ';
+	var cassQueryVal = [];
+	var queryCond = [];
+	queryCond.push('state = ?');
+	cassQueryVal.push(request.params.state);
+	queryCond.push('city = ?');
+	cassQueryVal.push(request.params.city);
+	// Check required query parameters
+	for (k in weatherdataIDQuery) {
+		if (!(weatherdataIDQuery[k] in request.query)) {
+	        response.writeHead(400, {'Content-Type': 'text/plain'});
+	        response.end('ERROR: Required query is omitted (' + k + ')');
+	        return;
+		} 
+	};
+	// Check unexpected query parameters
+	for (var k in request.query) {
+		if (weatherdataIDQuery.indexOf(k) <= -1) {
+	        response.writeHead(400, {'Content-Type': 'text/plain'});
+	        response.end('ERROR: Unknown query parameter (' + k + ')');
+	        return;
+		} 
+	};
+	queryCond.push('event_time >= ?');
+	queryCond.push('event_time <= ?');
+	cassQueryStmt += queryCond.join(' AND ');
+	// Prepare query parameter values
+	var beginDate = new Date(Date.parse(request.query['event_time_begin']));
+	var endDate = new Date(Date.parse(request.query['event_time_end']));
+	cassQueryVal.push(beginDate);
+	cassQueryVal.push(endDate);
+	// Bind query statement and query parameter values
+	// Send query to Cassandra database
+	cassClient.execute(cassQueryStmt, cassQueryVal, function(err, result) {
+		if (err) {
+			console.log(err)
+            response.status(400).send(JSON.stringify(err));
+		} else {
+			response.status(200).send(JSON.stringify({"content":result.rows, "links":[{"rel": "self","href": url}]}));
+		}
+		return;
+	});
+});
 
-// /*
-//  * --------------------
-//  * POST: /weatherdata
-//  * --------------------
-//  */ 
-// app.post('/weatherdata', function (request, response) {   
-// 	/* AUTH */
-// 	if (isAuthRequired && request.session.user_id === undefined) {
-//         response.status(401).end();
-//         return;
-//     }
-//     var body = JSON.parse(JSON.stringify(request.body));
-// 	var queries = [];
-// 	for (var i=0; i<body.length; i++){	
-// 		var keys = [];
-// 		var values = [];
-// 		var questions = [];
-// 		for (var k in body[i]) {
-// 			keys.push(k)
-// 			values.push(body[i][k])
-// 			questions.push("?")
-// 		};
-// 		var query = 'INSERT INTO weatherdata (' + keys.join(', ') + ') values (' + questions.join(', ') + ')'
-// 		queries.push({'query':query, 'params':values});
-// 	}
 
-// 	cassClient.batch(queries, { prepare: true }, function (err) {
-//    		if (err) {
-//    			console.log(err)
-//             response.status(400).end();
-// 		} else {
-// 			response.status(200).end();
-// 		}
-// 		return;
-// 	});
-// });
-
+/*
+ * --------------------
+ * POST: /weatherdata
+ * --------------------
+ */ 
+app.post('/weatherdata', function (request, response) {   
+	// Check auth
+	if (isAuthRequired && request.session.user_id === undefined) {
+        response.status(401).end();
+        return;
+    }
+    // Parse incoming data
+	var body = JSON.parse(JSON.stringify(request.body));
+	// Create query statement
+	var queries = [];
+	for (var i=0; i<body.length; i++){	
+		var keys = [];
+		var values = [];
+		var questions = [];
+		for (var k in body[i]) {
+			keys.push(k)
+			values.push(body[i][k])
+			questions.push("?")
+		};
+		var query = 'INSERT INTO weatherdata (' + keys.join(', ') + ') values (' + questions.join(', ') + ')'
+		queries.push({'query':query, 'params':values});
+	}
+	// Send query to Cassandra database
+	cassClient.batch(queries, { prepare: true }, function (err) {
+   		if (err) {
+   			console.log(err)
+            response.status(400).end();
+		} else {
+			response.status(200).end();
+		}
+		return;
+	});
+});
 
 
 /* 
@@ -603,7 +588,6 @@ app.post('/admin/login', function (request, response) {
 });
 
 
-
 /* 
  * --------------------
  * POST: /admin/logout
@@ -630,65 +614,6 @@ app.post('/admin/logout', function (request, response) {
         response.status(200).end();
     });   
 });
-
-
-
-// /* ****************
-//  * GET: /daqevent
-//  * ****************
-//  */ 
-// const daqeventQuery = ['event_time_begin','event_time_end'];
-// app.get('/daqevent', function (request, response) {
-// 	var url = request.protocol + '://' + request.get('host') + request.originalUrl;
-
-// 	var cassQueryStmt = 'SELECT event_time, sensor FROM daqevent ';
-// 	var cassQueryVal = [];
-// 	var queryCond = [];
-
-// 	if (Object.keys(request.query).length != 0) {
-// 		cassQueryStmt += 'WHERE ';
-// 		// Check if there're unexpected query condition
-// 		for (var k in request.query) {
-// 			if (daqeventQuery.indexOf(k) <= -1) {
-// 		        response.writeHead(400, {'Content-Type': 'text/plain'});
-// 		        response.end('ERROR: Unknown query parameter (' + k + ')');
-// 		        return;
-// 			} else {
-// 				// Push event_time_begin, event_time_end to the query statement
-// 				if (k == 'event_time_begin') {
-// 					queryCond.push('event_time >= ?');
-// 					cassQueryVal.push(new Date(Date.parse(request.query[k])));
-// 				} else if (k == 'event_time_end') {
-// 					queryCond.push('event_time <= ?');
-// 					cassQueryVal.push(new Date(Date.parse(request.query[k])));
-// 				}
-// 			}
-// 		}
-		
-// 		// Check if install is earlier than removal.
-// 		if (new Date(Date.parse(request.query['event_time_begin'])) >= new Date(Date.parse(request.query['event_time_end'])) ) {
-// 	        response.writeHead(400, {'Content-Type': 'text/plain'});
-// 	        response.end('ERROR: Wrong query condition. (event_time_begin should be earlier than event_time_end.)');
-// 	        return;
-// 		}
-
-// 		// Build query statement
-// 		cassQueryStmt += queryCond.join(' AND ');
-// 		cassQueryStmt += ' ALLOW FILTERING;'
-// 	}
-
-// 	// Execute query 
-// 	cassClient.execute(cassQueryStmt, cassQueryVal, function(err, result) {
-// 		if (err) {
-//             response.status(400).send(JSON.stringify(err));
-// 		} else {
-// 			console.log('Success (' + new Date() + '): GET /sensordata [Query: ' + cassQueryStmt +']')
-// 			response.status(200).send(JSON.stringify({"content":result.rows, "links":[{"rel": "self","href": url}]}));
-// 		}
-// 		return;
-// 	});
-// });
-
 
 
 // /* *************
