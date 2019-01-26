@@ -1,7 +1,7 @@
 {
-  "name": "bms",
+  "name": "iot-platform-civil",
   "version": "1.0.0",
-  "description": "test for bms",
+  "description": "npm for iot-platform-civil",
   "main": "webServer.js",
   "scripts": {
     "jshint": "./node_modules/.bin/jshint --config .jshintrc --exclude=node_modules . || exit 0"
@@ -20,19 +20,14 @@
     "express": "^4.13.3",
     "express-session": "^1.13.0",
     "jshint": "^2.9.1-rc2",
-    "mongoose": "^4.3.4",
     "multer": "^1.1.0",
     "cassandra-driver": "^3.0.1",
-    "apache-spark-node": "^0.3.3",
     "basic-auth": "^1.1.0",
-    "eclairjs": "^0.9.1",
     "python-shell": "^0.4.0",
     "uuid": "^3.0.1",
     "xml": "^1.0.1",
     "xml2js": "^0.4.17",
-    "helmet": "^3.5.0",
     "mime": "^1.3.4",
     "dateformat": "^2.0.0"
-
     }
 }
