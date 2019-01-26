@@ -1,6 +1,7 @@
 {
 	"db_info":
 	{
+		"multi_node": false,
 		"cluster_name": "Test Cluster",
 		"data_center_id": "dc1",
 		"rack_id": "rack1",
@@ -9,10 +10,6 @@
 		"data_file_directories": "data/data",
 		"commitlog_directory": "data/commitlog",
 		"saved_caches_directory": "data/saved_caches",
-		"listen_address": "localhost",
-		"broadcast_address": "",
-		"rpc_address": "localhost",
-		"broadcast_rpc_address": "",
 		"rpc_min_threads": 16,
 		"rpc_max_threads": 2048,
 		"read_request_timeout_in_ms": 5000,
@@ -24,7 +21,6 @@
 		"request_timeout_in_ms": 10000,
 		"authenticator": "AllowAllAuthenticator",
 		"authorizer": "AllowAllAuthorizer",
-		"endpoint_snitch": "SimpleSnitch",
 		"batch_size_warn_threshold_in_kb": 5,
 		"batch_size_fail_threshold_in_kb": 50
 	},

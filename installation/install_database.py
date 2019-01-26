@@ -1,10 +1,12 @@
 import json
 import os
 import socket
+import urllib2
 
 def prepare_database_param(filepath):
 	param = json.loads(open(filepath).read())["db_info"]
-	param["ip_address"] = socket.gethostbyname(socket.gethostname())
+	param["private_ip_address"] = socket.gethostbyname(socket.gethostname())
+	param["public_ip_address"] = urllib2.urlopen('http://ip.42.pl/raw').read()
 	param["home_path"] = os.path.expanduser("~")
 	param["current_path"] = os.getcwd()
 	param["cassandra_path"] = "{0}/cassandra".format(os.getcwd())
@@ -83,19 +85,19 @@ def update_cassandra_config(param):
 	# Update cassandra.yaml
 	with open('{0}/conf/cassandra.yaml'.format(param["cassandra_home"]), 'r') as f :
 		filedata = f.read()
+		if param["multi_node"]:
+			filedata = filedata.replace('- seeds: "127.0.0.1"', '- seeds: \"{0}\"'.format(", ".join([s for s in param["seeds"]])))
+			filedata = filedata.replace('# broadcast_address: 1.2.3.4', 'broadcast_address: {0}'.format(param["public_ip_address"]))
+			filedata = filedata.replace('# broadcast_rpc_address: 1.2.3.4', 'broadcast_rpc_address: {0}'.format(param["public_ip_address"]))
+			filedata = filedata.replace('rpc_address: localhost', 'rpc_address: 0.0.0.0')
+			filedata = filedata.replace('listen_address: localhost', 'listen_address: {0}'.format(param["private_ip_address"]))
+			filedata = filedata.replace('endpoint_snitch: SimpleSnitch', 'endpoint_snitch: GossipingPropertyFileSnitch')
 		filedata = filedata.replace('cluster_name: \'Test Cluster\'', 'cluster_name: \'{0}\''.format(param["cluster_name"]))
-		filedata = filedata.replace('- seeds: "127.0.0.1"', '- seeds: \"{0}\"'.format(", ".join([s for s in param["seeds"]])))
 		filedata = filedata.replace('# hints_directory: /var/lib/cassandra/hints', 'hints_directory: {0}'.format(param["hints_directory"]))
 		filedata = filedata.replace('# data_file_directories:', 'data_file_directories:')
 		filedata = filedata.replace('#     - /var/lib/cassandra/data', '     - {0}'.format(param["data_file_directories"]))
 		filedata = filedata.replace('# commitlog_directory: /var/lib/cassandra/commitlog', 'commitlog_directory: {0}'.format(param["commitlog_directory"]))
 		filedata = filedata.replace('# saved_caches_directory: /var/lib/cassandra/saved_caches', 'saved_caches_directory: {0}'.format(param["saved_caches_directory"]))
-		filedata = filedata.replace('listen_address: localhost', 'listen_address: {0}'.format(param["listen_address"]))
-		if param["broadcast_address"]:
-			filedata = filedata.replace('# broadcast_address: 1.2.3.4', 'broadcast_address: {0}'.format(param["broadcast_address"])) # param["ip_address"]
-		filedata = filedata.replace('rpc_address: localhost', 'rpc_address: {0}'.format(param["rpc_address"]))
-		if param["broadcast_rpc_address"]:
-			filedata = filedata.replace('# broadcast_rpc_address: 1.2.3.4', 'broadcast_rpc_address: {0}'.format(param["broadcast_rpc_address"])) # param["ip_address"]
 		filedata = filedata.replace('# rpc_min_threads: 16', 'rpc_min_threads: {0}'.format(param["rpc_min_threads"]))
 		filedata = filedata.replace('# rpc_max_threads: 2048', 'rpc_max_threads: {0}'.format(param["rpc_max_threads"]))
 		filedata = filedata.replace('read_request_timeout_in_ms: 5000', 'read_request_timeout_in_ms: {0}'.format(param["read_request_timeout_in_ms"]))
@@ -107,7 +109,6 @@ def update_cassandra_config(param):
 		filedata = filedata.replace('request_timeout_in_ms: 10000', 'request_timeout_in_ms: {0}'.format(param["request_timeout_in_ms"]))
 		filedata = filedata.replace('authenticator: AllowAllAuthenticator', 'authenticator: {0}'.format(param["authenticator"]))
 		filedata = filedata.replace('authorizer: AllowAllAuthorizer', 'authorizer: {0}'.format(param["authorizer"]))
-		filedata = filedata.replace('endpoint_snitch: SimpleSnitch', 'endpoint_snitch: {0}'.format(param["endpoint_snitch"]))
 		filedata = filedata.replace('batch_size_warn_threshold_in_kb: 5', 'batch_size_warn_threshold_in_kb: {0}'.format(param["batch_size_warn_threshold_in_kb"]))
 		filedata = filedata.replace('batch_size_fail_threshold_in_kb: 50', 'batch_size_fail_threshold_in_kb: {0}'.format(param["batch_size_warn_threshold_in_kb"]))
 		filedata += '\n'
