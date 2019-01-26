@@ -98,7 +98,7 @@ app.get('/sensordata/:id', function (request, response) {
 	queryCond.push('sensor_id = ?');
 	cassQueryVal.push(request.params.id);
 	// Check required query parameters
-	for (k in sensordataIDQuery) {
+	for (var k in sensordataIDQuery) {
 		if (!(k in request.query)) {
 	        response.writeHead(400, {'Content-Type': 'text/plain'});
 	        response.end('ERROR: Required query is omitted (' + k + ')');
