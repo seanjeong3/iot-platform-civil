@@ -7,6 +7,7 @@ def prepare_database_param(filepath):
 	param["ip_address"] = socket.gethostbyname(socket.gethostname())
 	param["home_path"] = os.path.expanduser("~")
 	param["current_path"] = os.getcwd()
+	param["cassandra_path"] = "{0}/cassandra".format(os.getcwd())
 	param["cassandra_home"] = "{0}/cassandra/apache-cassandra-3.9".format(os.getcwd())
 	param["hints_directory"] = "{0}/{1}".format(param["cassandra_home"],param["hints_directory"]) if param["hints_directory"][0] != "/" else param["hints_directory"]
 	param["data_file_directories"] = "{0}/{1}".format(param["cassandra_home"],param["data_file_directories"]) if param["data_file_directories"][0] != "/" else param["data_file_directories"]
@@ -70,9 +71,9 @@ def install_database_dependency():
 
 def install_cassandra(param):
 	os.system("wget https://archive.apache.org/dist/cassandra/3.9/apache-cassandra-3.9-bin.tar.gz")
-	os.system('tar -zxvf apache-cassandra-3.9-bin.tar.gz -C {0}'.format(param["cassandra_home"]))
+	os.system('tar -zxvf apache-cassandra-3.9-bin.tar.gz -C {0}'.format(param["cassandra_path"]))
 	os.system("rm apache-cassandra-3.9-bin.tar.gz")
-	os.system('sudo chown -R $USER:$GROUP {0}'.format(param["cassandra_path"]))
+	os.system('sudo chown -R $USER:$GROUP {0}'.format(param["cassandra_home"]))
 
 
 
