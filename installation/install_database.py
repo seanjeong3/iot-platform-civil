@@ -204,7 +204,7 @@ def install_database(filepath):
 	print("[install_database.py] Create database folders.")
 	create_database_folders(param)
 	# Install dependencies
-	print("[install_database.py] Create database dependency.")
+	print("[install_database.py] Install database dependency.")
 	install_database_dependency()
 	# Install Cassandra 
 	print("[install_database.py] Install Cassandra.")
