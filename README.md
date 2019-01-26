@@ -41,7 +41,7 @@ python setup.py install database installation/setup_multi.json
 python setup.py install webserver installation/setup_multi.json
 ```
 
-# Run
+# Run platform
 ## Single-node
 To run the platform, both Cassandra database and web server need to be executed as follows:
 1. Run Cassandra 
@@ -73,7 +73,7 @@ python setup_schema.py
 ```
 It should be noted that data schema import needs to be done only on a SINGLE database node.
 
-# Use
+# Interface
 ## REST API
 The platform provides REST APIs for supporting storing & retrieval of sensor data, sensor information and other relevant domain information. (Example will be added.)
 
