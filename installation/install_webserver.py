@@ -42,7 +42,8 @@ def install_webserver(filepath):
 	print("[install_webserver.py] Install node.js.")
 	install_nodejs()
 	# Install npm on the webserver folder
-	install_npm()
+	install_npm(param)
+	# Update webServer.js according to input param
 
 
 def uninstall_webserver(filepath):
