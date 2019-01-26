@@ -30,11 +30,10 @@ def read_arg():
 	else:
 		arg["target"] = sys.argv[2]
 	# check argument 3
-	arg["input"] = None
 	if len(sys.argv)<4:
 		print('ERROR: arg_4 is missing {0}'.format("setup.json"))
 		exit(0)
-	elif os.path.isfile(sys.argv[3]):
+	elif not os.path.isfile(sys.argv[3]):
 		print('ERROR: file {0} does not exist'.format(sys.argv[3]))
 		exit(0)
 	else:
