@@ -71,8 +71,9 @@ def install_database_dependency():
 def install_cassandra(param):
 	os.system("wget https://archive.apache.org/dist/cassandra/3.9/apache-cassandra-3.9-bin.tar.gz")
 	os.system('tar -zxvf apache-cassandra-3.9-bin.tar.gz -C {0}'.format(param["cassandra_home"]))
+	os.system("rm apache-cassandra-3.9-bin.tar.gz")
 	os.system('sudo chown -R $USER:$GROUP {0}'.format(param["cassandra_path"]))
-	
+
 
 
 def install_database(filepath):
