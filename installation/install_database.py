@@ -3,6 +3,7 @@ import os
 import socket
 import urllib2
 
+# Read computer-specific parameters (e.g., private/public IP, home DIR, etc)
 def prepare_database_param(filepath):
 	param = json.loads(open(filepath).read())["db_info"]
 	param["private_ip_address"] = socket.gethostbyname(socket.gethostname())
@@ -18,6 +19,7 @@ def prepare_database_param(filepath):
 	return param
 
 
+# Create necessary directories for Cassandra 
 def create_database_folders(param):
 	# Check if there already exists something on the cassandra_home. If so stop installation.
 	if os.path.isdir(param["cassandra_home"]):
@@ -124,6 +126,7 @@ def update_cassandra_config(param):
 			f.write(filedata)
 
 
+# Add Cassandra path to the bash profile
 def export_cassandra_path(param):
 	os.system('export CQLSH_NO_BUNDLED=true')
 	os.system('export PATH={0}/bin:$PATH'.format(param["cassandra_home"]))
@@ -138,6 +141,7 @@ def export_cassandra_path(param):
 				f.write(filedata)
 
 
+# Make Cassandra session, particularly for distributed session, keep alive
 def make_session_keep_alive():
 	os.system('sudo sysctl -w net.ipv4.tcp_keepalive_time=60 net.ipv4.tcp_keepalive_probes=3 net.ipv4.tcp_keepalive_intvl=10')
 
@@ -171,5 +175,7 @@ def install_database(filepath):
 	enable_cassandra_auto_auth(param)
 
 
+def uninstall_database(filepath):
+	print ('here')
 
 

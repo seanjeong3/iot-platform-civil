@@ -3,7 +3,7 @@
 
 import sys
 import os
-from installation.install_database import install_database
+from installation.install_database import install_database, uninstall_database
 
 INSTALL_ARG = ["install", "uninstall"]
 TARGET_ARG = ["database", "webserver"]
@@ -61,12 +61,8 @@ def check_and_start(install, target, func, arg):
 	func(arg["input"])
 
 
-# def install_database(arg):
-# 	print('dummy install database')
 def install_webserver(arg):
 	print('[setup.py] dummy install webserver')
-def uninstall_database(arg):
-	print('[setup.py] dummy install database')
 def uninstall_webserver(arg):
 	print('[setup.py] dummy uninstall webserver')
 
