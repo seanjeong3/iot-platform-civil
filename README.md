@@ -76,15 +76,6 @@ It should be noted that data schema import needs to be done only on a SINGLE dat
 # USE
 ## REST API
 The platform provides REST APIs for supporting storing & retrieval of sensor data, sensor information and other relevant domain information. 
-```sh
-GET /sensor
-GET /sensor/:id
-GET /sensordata/:id
-GET /imagedata/:id
-POST /sensor
-POST /sensordata
-POST /imagedata
-```
 
 ## Python API
-A python API
+A python API is developed to make the use of platform easier. The API abstracts REST APIs so that users can store and retrieve data using Python script. 
