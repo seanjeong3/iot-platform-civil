@@ -159,7 +159,7 @@ app.post('/sensordata', function (request, response) {
     // Parse incoming data
 	var body = JSON.parse(JSON.stringify(request.body));
 	// Prepare cql query statement
-	const query = 'INSERT INTO sensordataraw (sensor_id, year, event_time, data) values (?, ?, ?, ?)';
+	const query = 'INSERT INTO sensordata (sensor_id, year, event_time, data) values (?, ?, ?, ?)';
 	// Bind query statement and query parameter values
 	var queries = []
 	for (var i=0; i<body.length; i++){
