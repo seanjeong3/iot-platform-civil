@@ -58,7 +58,7 @@ def check_and_start(install, target, func, arg):
 			exit(0)
 		else:
 			print('[setup.py] Please answer in [y/n]')
-	func(arg)
+	func(arg["input"])
 
 
 # def install_database(arg):
