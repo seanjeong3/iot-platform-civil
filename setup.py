@@ -1,5 +1,5 @@
 # Proper command format: 
-# python setup.py [install,uninstall] [cassandra,node.js] [none, <filename.json>]
+# python setup.py [install,uninstall] [cassandra,node.js] [<filename.json>]
 
 import sys
 import os
@@ -31,12 +31,14 @@ def read_arg():
 		arg["target"] = sys.argv[2]
 	# check argument 3
 	arg["input"] = None
-	if len(sys.argv)==4:
-		if not os.path.isfile(sys.argv[3]):
-			print('ERROR: file {0} does not exist'.format(sys.argv[3]))
-			exit(0)
-		else:
-			arg["input"] = sys.argv[3]
+	if len(sys.argv)<4:
+		print('ERROR: arg_4 is missing {0}'.format("setup.json"))
+		exit(0)
+	elif os.path.isfile(sys.argv[3]):
+		print('ERROR: file {0} does not exist'.format(sys.argv[3]))
+		exit(0)
+	else:
+		arg["input"] = sys.argv[3]
 	# check redundant arguments
 	if len(sys.argv) > 4:
 		print('ERROR: too many arguments')
