@@ -2,10 +2,10 @@
 	"db_info":
 	{
 		"multi_node": false,
+		"seeds": ["127.0.0.1"],
 		"cluster_name": "Test Cluster",
 		"data_center_id": "dc1",
 		"rack_id": "rack1",
-		"seeds": ["127.0.0.1"],
 		"hints_directory": "data/hints",
 		"data_file_directories": "data/data",
 		"commitlog_directory": "data/commitlog",
