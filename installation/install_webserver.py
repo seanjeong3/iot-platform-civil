@@ -15,20 +15,22 @@ def install_database_dependency():
 	os.system('sudo apt-get update')
 	print("[install_webserver.py] sudo apt install openjdk-8-jre-headless")
 	os.system('sudo apt install openjdk-8-jre-headless')
-	print("curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -")
+	print("[install_webserver.py] curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -")
 	os.system('curl -sL https://deb.nodesource.com/setup_9.x | sudo -E bash -')
-	print("sudo apt-get install -y nodejs")
+	print("[install_webserver.py] sudo apt-get install -y nodejs")
 	os.system('sudo apt-get install -y nodejs')
-	print("sudo apt install npm")
-	os.system('sudo apt install npm')
+	print("[install_webserver.py] sudo apt install aptitude")
+	os.system('sudo apt install aptitude')
+	print("[install_webserver.py] sudo aptitude install npm")
+	os.system('sudo aptitude install npm')
 
 
-# Download Cassandra (v3.9) and unzip it to the cassandra_path
-def install_cassandra(param):
-	os.system("wget https://archive.apache.org/dist/cassandra/3.9/apache-cassandra-3.9-bin.tar.gz")
-	os.system('tar -zxvf apache-cassandra-3.9-bin.tar.gz -C {0}'.format(param["cassandra_path"]))
-	os.system("rm apache-cassandra-3.9-bin.tar.gz")
-	os.system('sudo chown -R $USER:$GROUP {0}'.format(param["cassandra_home"]))
+# # Download Cassandra (v3.9) and unzip it to the cassandra_path
+# def install_cassandra(param):
+# 	os.system("wget https://archive.apache.org/dist/cassandra/3.9/apache-cassandra-3.9-bin.tar.gz")
+# 	os.system('tar -zxvf apache-cassandra-3.9-bin.tar.gz -C {0}'.format(param["cassandra_path"]))
+# 	os.system("rm apache-cassandra-3.9-bin.tar.gz")
+# 	os.system('sudo chown -R $USER:$GROUP {0}'.format(param["cassandra_home"]))
 
 
 def install_webserver(filepath):
