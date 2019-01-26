@@ -1,0 +1,32 @@
+// Setup metadata for single-node database implememtation
+{
+	"db_info":
+	{
+		"multi_node": false,
+		"seeds": ["127.0.0.1"],
+		"cluster_name": "Test Cluster",
+		"data_center_id": "dc1",
+		"rack_id": "rack1",
+		"hints_directory": "data/hints",
+		"data_file_directories": "data/data",
+		"commitlog_directory": "data/commitlog",
+		"saved_caches_directory": "data/saved_caches",
+		"rpc_min_threads": 16,
+		"rpc_max_threads": 2048,
+		"read_request_timeout_in_ms": 5000,
+		"range_request_timeout_in_ms": 10000,
+		"write_request_timeout_in_ms": 30000,
+		"counter_write_request_timeout_in_ms": 5000,
+		"cas_contention_timeout_in_ms": 1000,
+		"truncate_request_timeout_in_ms": 60000,
+		"request_timeout_in_ms": 10000,
+		"authenticator": "AllowAllAuthenticator",
+		"authorizer": "AllowAllAuthorizer",
+		"batch_size_warn_threshold_in_kb": 5,
+		"batch_size_fail_threshold_in_kb": 50
+	},
+	"ws_info":
+	{
+		"port": 8080
+	}
+}
