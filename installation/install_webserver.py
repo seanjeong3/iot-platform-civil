@@ -3,7 +3,7 @@ import os
 
 def prepare_database_param(filepath):
 	param = json.loads(open(filepath).read())["ws_info"]
-	param["webserver_path"] = "{0}/webserver".format(os.getcwd())
+	param["webserver_home"] = "{0}/webserver".format(os.getcwd())
 	return param
 
 
@@ -28,7 +28,17 @@ def install_nodejs():
 
 
 def install_npm(param):
-	os.system('npm install --prefix {0}'.format(param["webserver_path"]))
+	os.system('npm install --prefix {0}'.format(param["webserver_home"]))
+
+
+def update_webserver(param):
+	# Update webServer.js
+	with open('{0}/webServer.js'.format(param["webserver_home"]), 'r') as f :
+		filedata = f.read()
+		filedata = filedata.replace('var portno = 3000;', 'var portno = {0};'.format(param["port"]))
+		filedata = filedata.replace("['localhost:9042']", "[]".format(", ".join(["'"+s+":9042'" for s in param["database_nodes"]])))
+		with open('{0}/webServer.js'.format(param["webserver_home"]), 'w') as f :
+			f.write(filedata)
 
 
 def install_webserver(filepath):
@@ -44,6 +54,7 @@ def install_webserver(filepath):
 	# Install npm on the webserver folder
 	install_npm(param)
 	# Update webServer.js according to input param
+	update_webserver(param)
 
 
 def uninstall_webserver(filepath):
