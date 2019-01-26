@@ -73,7 +73,7 @@ python setup_schema.py
 ```
 It should be noted that data schema import needs to be done only on a SINGLE database node.
 
-# USE
+# Use
 ## REST API
 The platform provides REST APIs for supporting storing & retrieval of sensor data, sensor information and other relevant domain information. 
 
