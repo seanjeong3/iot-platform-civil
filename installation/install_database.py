@@ -120,12 +120,22 @@ def update_cassandra_config(param):
 		filedata = f.read()
 		filedata = filedata.replace('dc=dc1', 'dc={0}'.format(param["data_center_id"]))
 		filedata = filedata.replace('rack=rack1', 'rack={0}'.format(param["rack_id"]))
+		with open('{0}/conf/cassandra-rackdc.properties'.format(param["cassandra_home"]), 'w') as f :
+			f.write(filedata)
 
 
 def export_cassandra_path(param):
-	# Still need to manually source it!
-	os.system('echo  "export CQLSH_NO_BUNDLED=true" >> ~/.profile')
-	os.system('echo  "export PATH=\"{0}/bin:\$PATH\"" >> ~/.profile'.format(param["cassandra_home"]))
+	os.system('export CQLSH_NO_BUNDLED=true')
+	os.system('export PATH="{0}/bin:$PATH"'.format(param["cassandra_path"]))
+	with open('{0}/.profile'.format(param["home_path"]), 'r') as f :
+		filedata = f.read()
+		if "export CQLSH_NO_BUNDLED=true" not in filedata:
+			filedata += '\n'
+			filedata += 'export CQLSH_NO_BUNDLED=true'
+		if 'export PATH=\"{0}/bin:\$PATH\"'.format(param["cassandra_home"]) not in filedata:
+			filedata += 'export PATH=\"{0}/bin:\$PATH\"'.format(param["cassandra_home"])
+			with open('{0}/.profile'.format(param["home_path"]), 'w') as f :
+				f.write(filedata)
 
 
 def make_session_keep_alive():
