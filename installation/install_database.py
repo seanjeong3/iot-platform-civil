@@ -133,7 +133,7 @@ def export_cassandra_path(param):
 			filedata += '\n'
 			filedata += 'export CQLSH_NO_BUNDLED=true\n'
 		if 'export PATH=\"{0}/bin:\$PATH\"'.format(param["cassandra_home"]) not in filedata:
-			filedata += 'export PATH=\"{0}/bin:\$PATH\"\n'.format(param["cassandra_home"])
+			filedata += 'export PATH={0}/bin:\$PATH\n'.format(param["cassandra_home"])
 			with open('{0}/.profile'.format(param["home_path"]), 'w') as f :
 				f.write(filedata)
 
