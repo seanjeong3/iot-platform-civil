@@ -41,6 +41,19 @@ def update_webserver(param):
 			f.write(filedata)
 
 
+def stop_webserver():
+	os.system('pkill -f \'webServer.js\'')
+
+
+def remove_webserver_folders(param):
+	if os.path.isdir("{0}/etc".format(param["webserver_home"])):
+		os.system('sudo rm -rf {0}/etc'.format(param["webserver_home"]))
+	if os.path.isdir("{0}/node_modules".format(param["webserver_home"])):
+		os.system('sudo rm -rf {0}/node_modules'.format(param["webserver_home"]))
+	if os.path.isfile("{0}/package-lock.json".format(param["webserver_home"])):
+		os.system('sudo rm -rf {0}/package-lock.json'.format(param["webserver_home"]))
+
+
 def install_webserver(filepath):
 	# Prepare parameters
 	print("[install_webserver.py] Read webserver parameters.")
@@ -58,4 +71,22 @@ def install_webserver(filepath):
 
 
 def uninstall_webserver(filepath):
-	print("here")
+	# Prepare parameters
+	print("[install_webserver.py] Read webserver parameters.")
+	param = prepare_database_param(filepath)
+	while True:
+		print("[install_webserver.py] This action will permenantly REMOVE installed web server modules")
+		ans = raw_input('[install_webserver.py] Do you want to proceed? [(y)/n]') or 'y'
+		if ans == 'y':
+			print("[install_webserver.py] uninstall started")
+			break
+		elif ans == 'n':
+			print('[install_webserver.py] uninstall webserver has been canceled'.format(install))
+			exit(0)
+		else:
+			print('[install_webserver.py] Please answer in [y/n]')
+	print("[install_webserver.py] Stop web server process.")
+	stop_webserver()
+	print("[install_webserver.py] Remove web server module folders.")
+	remove_webserver_folders(param)
+	
