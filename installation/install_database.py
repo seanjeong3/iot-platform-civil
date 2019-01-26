@@ -62,6 +62,43 @@ def create_database_folders(param):
 	os.system('sudo chown -R $USER:$GROUP {0}'.format(param["saved_caches_directory"]))
 
 
+
+# Create necessary directories for Cassandra 
+def remove_database_folders(param):
+	# Check folders
+	if not os.path.isdir(param["hints_directory"]):
+		print("[install_database.py] ERROR: hints_directory path {0} does not exist".format(param["hints_directory"]))		
+		exit(0)
+	if not os.path.isdir(param["data_file_directories"]):
+		print("[install_database.py] ERROR: data_file_directories path {0} does not exist".format(param["data_file_directories"]))		
+		exit(0)
+	if not os.path.isdir(param["commitlog_directory"]):
+		print("[install_database.py] ERROR: commitlog_directory path {0} does not exist".format(param["commitlog_directory"]))		
+		exit(0)
+	if not os.path.isdir(param["saved_caches_directory"]):
+		print("[install_database.py] ERROR: saved_caches_directory path {0} does not exist".format(param["saved_caches_directory"]))		
+		exit(0)
+	if not os.path.isdir(param["cassandra_home"]):
+		print("[install_database.py] ERROR: cassandra_home path {0} does not exist".format(param["cassandra_home"]))		
+		exit(0)
+	if not os.path.isdir(param["cassandra_path"]):
+		print("[install_database.py] ERROR: cassandra_path path {0} does not exist".format(param["cassandra_path"]))		
+		exit(0)
+	# Remove folders
+	if os.path.isdir(param["hints_directory"]):
+		os.system('sudo rm -rf {0}'.format(param["hints_directory"]))
+	if os.path.isdir(param["data_file_directories"]):
+		os.system('sudo rm -rf {0}'.format(param["data_file_directories"]))
+	if os.path.isdir(param["commitlog_directory"]):
+		os.system('sudo rm -rf {0}'.format(param["commitlog_directory"]))
+	if os.path.isdir(param["saved_caches_directory"]):
+		os.system('sudo rm -rf {0}'.format(param["saved_caches_directory"]))
+	if os.path.isdir(param["cassandra_home"]):
+		os.system('sudo rm -rf {0}'.format(param["cassandra_home"]))
+	if os.path.isdir(param["cassandra_path"]):
+		os.system('sudo rm -rf {0}'.format(param["cassandra_path"]))
+
+
 # Install database dependency using shell commands
 def install_database_dependency():
 	print("[install_database.py] sudo apt-get update")
@@ -176,6 +213,28 @@ def install_database(filepath):
 
 
 def uninstall_database(filepath):
-	print ('here')
+	while True:
+		print("[install_database.py] This action will permenantly REMOVE following directories")
+		print("----------")
+		print(param["hints_directory"])
+		print(param["data_file_directories"])
+		print(param["commitlog_directory"])
+		print(param["saved_caches_directory"])
+		print(param["cassandra_home"])
+		print(param["cassandra_path"])
+		ans = raw_input('[install_database.py] Do you want to proceed? [(y)/n]') or 'y'
+		if ans == 'y':
+			print("[install_database.py] uninstall started")
+			break
+		elif ans == 'n':
+			print('[install_database.py] uninstall database has been canceled'.format(install))
+			exit(0)
+		else:
+			print('[install_database.py] Please answer in [y/n]')
+	# Prepare parameters
+	print("[install_database.py] Read database parameters.")
+	param = prepare_database_param(filepath)
+	print("[install_database.py] Remove database folders.")
+	remove_database_folders(param)
 
 
